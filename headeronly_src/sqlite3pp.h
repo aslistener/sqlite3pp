@@ -119,6 +119,8 @@ namespace sqlite3pp
     void set_update_handler(update_handler h);
     void set_authorize_handler(authorize_handler h);
 
+    sqlite3* getSqlite3();
+
    private:
     sqlite3* db_;
 

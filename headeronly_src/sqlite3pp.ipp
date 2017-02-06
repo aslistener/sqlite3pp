@@ -184,6 +184,11 @@ namespace sqlite3pp
     sqlite3_set_authorizer(db_, ah_ ? authorizer_impl : 0, &ah_);
   }
 
+  inline sqlite3* database::getSqlite3()
+  {
+    return db_;
+  }
+
   inline long long int database::last_insert_rowid() const
   {
     return sqlite3_last_insert_rowid(db_);
