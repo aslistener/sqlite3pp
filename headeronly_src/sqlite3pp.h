@@ -47,25 +47,25 @@ namespace sqlite3pp
 
   template <class T>
   struct convert {
-    using to_int = int;
+    typedef int to_int;
   };
 
   class null_type {};
 
   class noncopyable
   {
-   protected:
-    noncopyable() = default;
-    ~noncopyable() = default;
+//   protected:
+//    noncopyable(){} //= default;
+//    ~noncopyable(){} //= default;
 
-    noncopyable(noncopyable&&) = default;
-    noncopyable& operator=(noncopyable&&) = default;
+//    noncopyable(noncopyable&&) = default;
+//    noncopyable& operator=(noncopyable&&) = default;
 
-    noncopyable(noncopyable const&) = delete;
-    noncopyable& operator=(noncopyable const&) = delete;
+//    noncopyable(noncopyable const&) = delete;
+//    noncopyable& operator=(noncopyable const&) = delete;
   };
 
-  class database : noncopyable
+  class database //: noncopyable
   {
     friend class statement;
     friend class database_error;
@@ -73,12 +73,12 @@ namespace sqlite3pp
     friend class ext::aggregate;
 
    public:
-    using busy_handler = std::function<int (int)>;
-    using commit_handler = std::function<int ()>;
-    using rollback_handler = std::function<void ()>;
-    using update_handler = std::function<void (int, char const*, char const*, long long int)>;
-    using authorize_handler = std::function<int (int, char const*, char const*, char const*, char const*)>;
-    using backup_handler = std::function<void (int, int, int)>;
+    typedef std::function<int (int)> busy_handler;
+    typedef std::function<int ()> commit_handler;
+    typedef std::function<void ()> rollback_handler;
+    typedef std::function<void (int, char const*, char const*, long long int)> update_handler;
+    typedef std::function<int (int, char const*, char const*, char const*, char const*)> authorize_handler;
+    typedef std::function<void (int, int, int)> backup_handler;
 
     explicit database(char const* dbname = nullptr, int flags = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, const char* vfs = nullptr);
 
@@ -93,7 +93,7 @@ namespace sqlite3pp
     int attach(char const* dbname, char const* name);
     int detach(char const* name);
 
-    int backup(database& destdb, backup_handler h = {});
+    int backup(database& destdb, backup_handler h);
     int backup(char const* dbname, database& destdb, char const* destdbname, backup_handler h, int step_page = 5);
 
     long long int last_insert_rowid() const;
@@ -261,10 +261,10 @@ namespace sqlite3pp
         return get(idx, T());
       }
 
-      template <class... Ts>
-      std::tuple<Ts...> get_columns(typename convert<Ts>::to_int... idxs) const {
-        return std::make_tuple(get(idxs, Ts())...);
-      }
+//      template <class... Ts>
+//      std::tuple<Ts...> get_columns(typename convert<Ts>::to_int... idxs) const {
+//        return std::make_tuple(get(idxs, Ts())...);
+//      }
 
       getstream getter(int idx = 0);
 
@@ -307,7 +307,7 @@ namespace sqlite3pp
     char const* column_name(int idx) const;
     char const* column_decltype(int idx) const;
 
-    using iterator = query_iterator;
+    typedef query_iterator iterator;
 
     iterator begin();
     iterator end();
